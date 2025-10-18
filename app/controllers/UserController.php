@@ -9,7 +9,6 @@ class UserController {
     }
 
     public function showLogin() {
-
         if (isset($_SESSION['userid'])) {
             header('Location: index.php?c=user&f=dashboard');
             exit;
@@ -31,6 +30,30 @@ class UserController {
             header('Location: index.php?c=user&f=showLogin');
             exit;
         }
+        
+        // Ambil data dari service
+        $totalUsers = $this->userService->countTotalUsers();
+        $newUsersThisMonth = $this->userService->countNewUsersThisMonth();
+        $newUsersLastMonth = $this->userService->countNewUsersLastMonth();
+
+        // Hitung persentase pertumbuhan pengguna
+        $userGrowthPercentage = 0;
+        if ($newUsersLastMonth > 0) {
+            $userGrowthPercentage = (($newUsersThisMonth - $newUsersLastMonth) / $newUsersLastMonth) * 100;
+        } else if ($newUsersThisMonth > 0) {
+            $userGrowthPercentage = 100; // Pertumbuhan tak terhingga jika bulan lalu 0
+        }
+        
+        // Siapkan data untuk view
+        $data = [
+            'totalUsers' => $totalUsers,
+            'newUsersThisMonth' => $newUsersThisMonth,
+            'userGrowthPercentage' => round($userGrowthPercentage), // Dibulatkan
+            'activeSessions' => 42, // Placeholder
+            'revenue' => "24.5K", // Placeholder
+            'satisfaction' => "98.5%", // Placeholder
+        ];
+
         include __DIR__ . '/../view/User/dashboard.php';
     }
 
@@ -38,7 +61,6 @@ class UserController {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
-        // Validasi input
         if (empty($email) || empty($password)) {
             $_SESSION['error'] = 'Email dan password harus diisi!';
             header('Location: index.php?c=user&f=showLogin');
@@ -48,10 +70,14 @@ class UserController {
         $user = $this->userService->findByEmail($email);
         
         if ($user && password_verify($password, $user->password)) {
+            $this->userService->updateLastLogin($user->id);
             $_SESSION['userid'] = $user->id;
             $_SESSION['nama'] = $user->nama;
             $_SESSION['email'] = $user->email;
+            $_SESSION['created_at'] = $user->created_at; 
+            $_SESSION['last_login'] = date('Y-m-d H:i:s'); 
             $_SESSION['success'] = 'Login berhasil! Selamat datang, ' . $user->nama;
+            
             header('Location: index.php?c=user&f=dashboard');
             exit;
         } else {
@@ -67,7 +93,6 @@ class UserController {
         $password = $_POST['password'] ?? '';
         $confirmpassword = $_POST['confirm_password'] ?? '';
 
-        // Validasi
         if (empty($nama) || empty($email) || empty($password) || empty($confirmpassword)) {
             $_SESSION['error'] = 'Semua field harus diisi!';
             header('Location: index.php?c=user&f=showRegister');
@@ -106,4 +131,46 @@ class UserController {
         header('Location: index.php?c=user&f=showLogin');
         exit;
     }
+
+    public function changePassword() {
+    header('Content-Type: application/json');
+    error_log('ChangePassword called'); // Tambah log
+    if (!isset($_SESSION['userid'])) {
+        echo json_encode(['success' => false, 'message' => 'User tidak login']);
+        return;
+    }
+
+    $userId = $_SESSION['userid'];
+    $currentPassword = $_POST['current_password'] ?? '';
+    $newPassword = $_POST['new_password'] ?? '';
+    $confirmNewPassword = $_POST['confirm_new_password'] ?? '';
+
+    error_log("UserID: $userId, Current: $currentPassword, New: $newPassword"); // Log data
+
+    if (empty($currentPassword) || empty($newPassword) || empty($confirmNewPassword)) {
+        echo json_encode(['success' => false, 'message' => 'Semua field password harus diisi!']);
+        return;
+    }
+
+    if ($newPassword !== $confirmNewPassword) {
+        echo json_encode(['success' => false, 'message' => 'Password baru dan konfirmasi tidak cocok!']);
+        return;
+    }
+
+    if (strlen($newPassword) < 6) {
+        echo json_encode(['success' => false, 'message' => 'Password minimal 6 karakter!']);
+        return;
+    }
+
+    $success = $this->userService->updatePassword($userId, $currentPassword, $newPassword);
+    error_log("Update success: " . ($success ? 'true' : 'false')); // Log hasil
+
+    if ($success) {
+        echo json_encode(['success' => true, 'message' => 'Password berhasil diperbarui!']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Gagal memperbarui password. Pastikan password saat ini benar.']);
+    }
 }
+
+}
+?>

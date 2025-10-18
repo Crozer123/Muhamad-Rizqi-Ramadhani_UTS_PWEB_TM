@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - MVC App</title>
-    <link rel="stylesheet" href="resource/dashboard.css">
+    <title>Dashboard - Rizqi App</title>
+    <link rel="stylesheet" href="/resource/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <?php
+        // Menentukan kelas dan ikon berdasarkan nilai persentase pertumbuhan pengguna
+        $growthClass = ($data['userGrowthPercentage'] >= 0) ? 'positive' : 'negative';
+        $growthIcon = ($data['userGrowthPercentage'] >= 0) ? 'fa-arrow-up' : 'fa-arrow-down';
+    ?>
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h2><i class="fas fa-cube"></i> MVC App</h2>
+                <h2><i class="fas fa-cube"></i> Rizqi App</h2>
             </div>
             <nav class="sidebar-nav">
                 <a href="index.php?c=user&f=dashboard" class="nav-item active">
@@ -55,12 +60,21 @@
                     </div>
                 </div>
             </header>
+            
             <?php if(isset($_SESSION['success'])): ?>
                 <div class="alert alert-success">
                     <i class="fas fa-check-circle"></i>
                     <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
                 </div>
             <?php endif; ?>
+            
+            <?php if(isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger" style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                </div>
+            <?php endif; ?>
+
             <div class="stats-grid">
                 <div class="stat-card card-purple">
                     <div class="stat-icon">
@@ -68,51 +82,13 @@
                     </div>
                     <div class="stat-info">
                         <h3>Total Users</h3>
-                        <p class="stat-number">1,284</p>
-                        <span class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> 12% dari bulan lalu
+                        <p class="stat-number"><?php echo $data['totalUsers']; ?></p>
+                        <span class="stat-change <?php echo $growthClass; ?>">
+                            <i class="fas <?php echo $growthIcon; ?>"></i> <?php echo abs($data['userGrowthPercentage']); ?>% dari bulan lalu
                         </span>
                     </div>
                 </div>
 
-                <div class="stat-card card-blue">
-                    <div class="stat-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Active Sessions</h3>
-                        <p class="stat-number">856</p>
-                        <span class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> 8% dari bulan lalu
-                        </span>
-                    </div>
-                </div>
-
-                <div class="stat-card card-green">
-                    <div class="stat-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Revenue</h3>
-                        <p class="stat-number">$24.5K</p>
-                        <span class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> 23% dari bulan lalu
-                        </span>
-                    </div>
-                </div>
-
-                <div class="stat-card card-orange">
-                    <div class="stat-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Satisfaction</h3>
-                        <p class="stat-number">98.5%</p>
-                        <span class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> 2% dari bulan lalu
-                        </span>
-                    </div>
-                </div>
             </div>
 
             <div class="content-grid">
@@ -140,21 +116,42 @@
                             </div>
                             <div class="info-item">
                                 <label><i class="fas fa-calendar"></i> Member Since:</label>
-                                <p><?php echo date('d M Y'); ?></p>
+                                <p><?php echo isset($_SESSION['created_at']) ? date('d M Y', strtotime($_SESSION['created_at'])) : 'N/A'; ?></p>
                             </div>
                             <div class="info-item">
                                 <label><i class="fas fa-clock"></i> Last Login:</label>
-                                <p><?php echo date('d M Y, H:i'); ?></p>
+                                <p><?php echo isset($_SESSION['last_login']) && $_SESSION['last_login'] ? date('d M Y, H:i', strtotime($_SESSION['last_login'])) : 'Sesi ini'; ?></p>
                             </div>
                         </div>
                         <div class="card-actions">
                             <button class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Edit Profile
                             </button>
-                            <button class="btn btn-secondary">
+                            <button id="changePasswordBtn" class="btn btn-secondary">
                                 <i class="fas fa-key"></i> Change Password
                             </button>
                         </div>
+                         <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Ganti Password</h2>
+            <form id="changePasswordForm">
+                <div class="input-group">
+                    <label for="current_password">Password Lama</label>
+                    <input type="password" id="current_password" name="current_password" required>
+                </div>
+                <div class="input-group">
+                    <label for="new_password">Password Baru</label>
+                    <input type="password" id="new_password" name="new_password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm_new_password">Konfirmasi Password Baru</label>
+                    <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+                </div>
+                <button type="submit" class="btn">Simpan</button>
+            </form>
+        </div>
+    </div>
                     </div>
                 </div>
 
@@ -173,72 +170,13 @@
                                     <p class="activity-time">Baru saja</p>
                                 </div>
                             </div>
-                            <div class="activity-item">
-                                <div class="activity-icon info">
-                                    <i class="fas fa-edit"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title">Profile Updated</p>
-                                    <p class="activity-time">2 jam yang lalu</p>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon warning">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title">Security Check</p>
-                                    <p class="activity-time">5 jam yang lalu</p>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon success">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title">Email Verified</p>
-                                    <p class="activity-time">1 hari yang lalu</p>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon info">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title">Account Created</p>
-                                    <p class="activity-time">3 hari yang lalu</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
-                <div class="actions-grid">
-                    <button class="action-btn">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Add New</span>
-                    </button>
-                    <button class="action-btn">
-                        <i class="fas fa-download"></i>
-                        <span>Export Data</span>
-                    </button>
-                    <button class="action-btn">
-                        <i class="fas fa-upload"></i>
-                        <span>Import Data</span>
-                    </button>
-                    <button class="action-btn">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Generate Report</span>
-                    </button>
                 </div>
             </div>
         </main>
     </div>
 
-    <script src="resource/dashboard.js"></script>
+    <script src="/resource/dashboard.js"></script>
 </body>
-</html>
+</html> 

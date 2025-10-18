@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Jakarta');
 $controllerName = isset($_GET['c']) ? ucfirst($_GET['c']) . 'Controller' : 'UserController';
 $methodName = isset($_GET['f']) ? $_GET['f'] : 'showLogin';
 $controllerFile = __DIR__ . '/../app/controllers/' . $controllerName . '.php';
