@@ -1,11 +1,11 @@
-<?php $product = $data['product']; // Ambil data produk dari controller ?>
+<?php $product = $data['product']; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Produk - Rizqi App</title>
-    <link rel="stylesheet" href="/resource/dashboard.css">
+    <link rel="stylesheet" href="/public/resource/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>

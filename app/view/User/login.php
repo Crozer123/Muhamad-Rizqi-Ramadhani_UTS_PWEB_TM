@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="resource/style.css">
+    <link rel="stylesheet" href="public/resource/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -51,6 +51,6 @@
             <p>silakan login dengan info pribadi Anda</p>
         </div>
     </div>
-    <script src="resource/script.js"></script>
+    <script src="/public/resource/script.js"></script>
 </body>
 </html>
