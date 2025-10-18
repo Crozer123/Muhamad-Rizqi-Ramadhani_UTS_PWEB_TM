@@ -162,35 +162,23 @@ class UserController {
     }
 }
 public function updateProfile() {
-        // Set header untuk merespons sebagai JSON (untuk AJAX)
         header('Content-Type: application/json');
-        
-        // Pastikan user sudah login
         if (!isset($_SESSION['userid'])) {
             echo json_encode(['success' => false, 'message' => 'User tidak login']);
             return;
         }
-
-        // Ambil data dari form
         $userId = $_SESSION['userid'];
         $nama = $_POST['nama'] ?? '';
         $email = $_POST['email'] ?? '';
-
-        // Validasi dasar
         if (empty($nama) || empty($email)) {
             echo json_encode(['success' => false, 'message' => 'Nama dan Email harus diisi!']);
             return;
         }
-
-        // Panggil service untuk memproses pembaruan
         $success = $this->userService->updateProfile($userId, $nama, $email);
         
         if ($success) {
-            // Jika berhasil, perbarui juga data di session
             $_SESSION['nama'] = $nama;
             $_SESSION['email'] = $email;
-            
-            // Siapkan pesan sukses untuk ditampilkan setelah halaman di-refresh
             $_SESSION['success'] = 'Profil berhasil diperbarui!';
             
             echo json_encode(['success' => true]);

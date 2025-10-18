@@ -288,11 +288,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     initTooltips();
-
-    window.addEventListener('load', function() {
-        const loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
-        console.log('%cPage loaded in: ' + loadTime + 'ms', 'color: #43e97b; font-weight: bold;');
-    });
-
-    console.log('%c🎉 Selamat Datang di Rizqi App! 🎉', 'color: #3b82f6; font-size: 20px; font-weight: bold;');
 });
