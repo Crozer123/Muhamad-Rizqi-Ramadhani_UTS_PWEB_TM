@@ -105,8 +105,11 @@
                                 <td style="padding: 12px;">Rp <?php echo number_format($product->price, 0, ',', '.'); ?></td>
                                 <td style="padding: 12px;"><?php echo $product->stock; ?></td>
                                 <td style="padding: 12px;">
-                                    <a href="#" style="color: #3b82f6; text-decoration: none;">Edit</a> |
-                                    <a href="#" style="color: #ef4444; text-decoration: none;">Hapus</a>
+                                  <a href="index.php?c=product&f=showEditForm&id=<?php echo $product->id; ?>" 
+                                       style="color: #3b82f6; text-decoration: none;">Edit</a> |
+                                    <a href="index.php?c=product&f=delete&id=<?php echo $product->id; ?>" 
+                                       style="color: #ef4444; text-decoration: none;"
+                                       onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">Hapus</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

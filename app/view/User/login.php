@@ -48,8 +48,7 @@
 
         <div class="side-panel">
             <h2>Selamat Datang Kembali!</h2>
-            <p>Untuk tetap terhubung dengan kami, silakan login dengan info pribadi Anda</p>
-            <a href="index.php?c=user&f=showRegister" class="side-btn"><i class="fas fa-user-plus"></i> Daftar</a>
+            <p>silakan login dengan info pribadi Anda</p>
         </div>
     </div>
     <script src="resource/script.js"></script>

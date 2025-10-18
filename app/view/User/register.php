@@ -42,9 +42,7 @@
         </div>
 
         <div class="side-panel">
-            <h2>Halo, Teman!</h2>
-            <p>Daftarkan diri Anda dan mulai perjalanan bersama kami</p>
-            <a href="index.php?c=user&f=showLogin" class="side-btn">Login</a>
+            <h2>Halo, silahkan daftar duluu</h2>
         </div>
     </div>
 </body>
