@@ -1,0 +1,140 @@
+/* Reset Sederhana */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* Header Navigasi Toko */
+.store-nav {
+    background-color: #1e293b;
+    color: #cbd5e1;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.store-nav .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+}
+.store-nav .logo i {
+    color: #38bdf8;
+}
+
+.store-nav .nav-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 1.5rem;
+    transition: color 0.2s;
+}
+.store-nav .nav-links a:hover {
+    color: #fff;
+}
+.store-nav .nav-links .btn-login {
+    background-color: #3b82f6;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+.store-nav .nav-links .btn-login:hover {
+    background-color: #2563eb;
+}
+
+/* Kontainer Utama */
+.store-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.store-container h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+}
+
+/* Grid Produk */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.product-card .product-image {
+    width: 100%;
+    height: 200px;
+    background-color: #eee;
+    text-align: center;
+    color: #aaa;
+    line-height: 200px;
+    font-style: italic;
+    /* Ganti dengan <img> jika Anda punya URL gambar */
+}
+
+.product-card .product-info {
+    padding: 1rem;
+}
+
+.product-card .product-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.product-card .product-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    height: 40px; /* Batasi deskripsi */
+    overflow: hidden;
+}
+
+.product-card .product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-card .product-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+.product-card .btn-buy {
+    background-color: #10b981;
+    color: #fff;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+}
+.product-card .btn-buy:hover {
+    background-color: #059669;
+}

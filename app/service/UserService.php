@@ -13,15 +13,15 @@ class UserService {
 
     public function findByEmail($email) {
    
-        $stmt = $this->conn->prepare('SELECT id_akun, nama, email, password, created_at, last_login FROM akun WHERE email = ?');
+        $stmt = $this->conn->prepare('SELECT id_akun, nama, email, password,role, created_at, last_login FROM akun WHERE email = ?');
         $stmt->bind_param('s', $email);
         $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $stmt->get_result();  
         $row = $result->fetch_assoc();
         $stmt->close();
         if ($row) {
             $user = new User($row['id_akun'], $row['nama'], $row['email'], $row['password']);
-            
+            $user->role = $row['role'];
             $user->created_at = $row['created_at'];
             $user->last_login = $row['last_login'];
             return $user;
@@ -34,7 +34,7 @@ class UserService {
         if ($existingUser) {
             return false; 
         }
-        $stmt = $this->conn->prepare('INSERT INTO akun (nama, email, password) VALUES (?, ?, ?)');
+        $stmt = $this->conn->prepare('INSERT INTO akun (nama, email, password,role) VALUES (?, ?, ?,"user")');
         $stmt->bind_param('sss', $nama, $email, $password);
         return $stmt->execute();
     }

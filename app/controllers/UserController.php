@@ -30,6 +30,18 @@ class UserController {
             header('Location: index.php?c=user&f=showLogin');
             exit;
         }
+      if ($_SESSION['role'] === 'user') {
+            header('Location: index.php?c=store&f=index');
+            exit;
+        } else if ($_SESSION['role'] !== 'admin') {
+            $_SESSION['error'] = 'Anda tidak memiliki hak akses!';
+            session_unset();
+            session_destroy();
+            header('Location: index.php?c=user&f=showLogin');
+            exit;
+        }
+
+        $totalUsers = $this->userService->countTotalUsers();
         $totalUsers = $this->userService->countTotalUsers();
         $newUsersThisMonth = $this->userService->countNewUsersThisMonth();
         $newUsersLastMonth = $this->userService->countNewUsersLastMonth();
@@ -65,6 +77,7 @@ class UserController {
             $_SESSION['userid'] = $user->id;
             $_SESSION['nama'] = $user->nama;
             $_SESSION['email'] = $user->email;
+            $_SESSION['role'] = $user->role;
             $_SESSION['created_at'] = $user->created_at; 
             $_SESSION['last_login'] = date('Y-m-d H:i:s'); 
             $_SESSION['success'] = 'Login berhasil! Selamat datang, ' . $user->nama;

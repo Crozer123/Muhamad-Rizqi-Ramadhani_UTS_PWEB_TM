@@ -4,6 +4,7 @@ class User {
     public $nama;
     public $email;
     public $password;
+    public $role;
     public $created_at;
     public $last_login;
 

@@ -22,6 +22,10 @@
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
+                <a href="index.php?c=product&f=showList" class="nav-item">
+                    <i class="fas fa-box-open"></i>
+                    <span>Manajemen Produk</span>
+                </a>
                 <a href="index.php?c=user&f=logout" class="nav-item logout">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
@@ -39,7 +43,7 @@
                     <div class="user-info">
                         <div class="user-details">
                             <span class="user-name"><?php echo htmlspecialchars($_SESSION['nama']); ?></span>
-                            <span class="user-role">Administrator</span>
+                       <span class="user-role"><?php echo htmlspecialchars(ucfirst($_SESSION['role'])); ?></span>
                         </div>
                         <div class="user-avatar">
                             <?php echo strtoupper(substr($_SESSION['nama'], 0, 1)); ?>
