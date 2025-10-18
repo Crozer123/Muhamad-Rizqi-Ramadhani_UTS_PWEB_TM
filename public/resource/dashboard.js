@@ -10,29 +10,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 
+    // --- LOGIKA MODAL GANTI PASSWORD ---
     const changePasswordModal = document.getElementById('changePasswordModal');
     const changePasswordBtn = document.getElementById('changePasswordBtn');
-    const closeBtn = document.querySelector('.modal .close-btn');
     const changePasswordForm = document.getElementById('changePasswordForm');
+    const cpCloseBtn = document.querySelector('#changePasswordModal .close-btn');
 
     if (changePasswordBtn && changePasswordModal) {
         changePasswordBtn.onclick = function() {
             changePasswordModal.classList.add('show-modal');
         }
     }
-
-    if (closeBtn && changePasswordModal) {
-        closeBtn.onclick = function() {
+    if (cpCloseBtn && changePasswordModal) {
+        cpCloseBtn.onclick = function() {
             changePasswordModal.classList.remove('show-modal');
         }
     }
-
-    window.onclick = function(event) {
-        if (event.target == changePasswordModal) {
-            changePasswordModal.classList.remove('show-modal');
-        }
-    }
-
     if (changePasswordForm) {
         changePasswordForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -43,11 +36,45 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                if (changePasswordModal) {
-                    changePasswordModal.classList.remove('show-modal');
-                }
+                if (changePasswordModal) changePasswordModal.classList.remove('show-modal');
+                showNotification(data.message, data.success ? 'success' : 'error');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Terjadi kesalahan koneksi.', 'error');
+            });
+        });
+    }
+
+    // --- LOGIKA MODAL EDIT PROFIL ---
+    const editProfileModal = document.getElementById('editProfileModal');
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const editProfileForm = document.getElementById('editProfileForm');
+    const epCloseBtn = document.querySelector('#editProfileModal .close-btn');
+
+    if (editProfileBtn && editProfileModal) {
+        editProfileBtn.onclick = function() {
+            editProfileModal.classList.add('show-modal');
+        }
+    }
+    if (epCloseBtn && editProfileModal) {
+        epCloseBtn.onclick = function() {
+            editProfileModal.classList.remove('show-modal');
+        }
+    }
+    if (editProfileForm) {
+        editProfileForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('index.php?c=user&f=updateProfile', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (editProfileModal) editProfileModal.classList.remove('show-modal');
                 if (data.success) {
-                    showNotification(data.message, 'success');
+                    window.location.reload();
                 } else {
                     showNotification(data.message, 'error');
                 }
@@ -57,6 +84,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNotification('Terjadi kesalahan koneksi.', 'error');
             });
         });
+    }
+
+    // Klik di luar modal untuk menutup
+    window.onclick = function(event) {
+        if (event.target == changePasswordModal) {
+            changePasswordModal.classList.remove('show-modal');
+        }
+        if (event.target == editProfileModal) {
+            editProfileModal.classList.remove('show-modal');
+        }
     }
 
     function toggleSidebar() {
@@ -87,11 +124,12 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (end.toString().includes('%')) {
                 const numValue = parseFloat(end.replace('%', ''));
                 currentValue = (progress * numValue).toFixed(1) + '%';
-            } else if (end.toString().includes(',')) {
-                const numValue = parseInt(end.replace(',', ''));
-                currentValue = Math.floor(progress * numValue).toLocaleString();
             } else {
-                const numValue = parseInt(end);
+                const numValue = parseInt(end.toString().replace(/,/g, ''));
+                 if(isNaN(numValue)) {
+                    element.textContent = end;
+                    return;
+                }
                 currentValue = Math.floor(progress * numValue).toLocaleString('id-ID');
             }
             element.textContent = currentValue;
@@ -112,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
@@ -130,13 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Aksi: ' + action + '\n\nFitur ini akan segera tersedia!');
         });
     });
-
-    const editProfileBtn = document.querySelector('.btn-primary');
-    if (editProfileBtn) {
-        editProfileBtn.addEventListener('click', function() {
-            alert('Edit Profil\n\nFitur edit profil akan segera tersedia!');
-        });
-    }
 
     document.querySelectorAll('.stat-card, .info-card, .activity-card').forEach(card => {
         card.addEventListener('mouseenter', function() {
@@ -164,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('.btn, .action-btn').forEach(button => {
         button.addEventListener('click', function(e) {
-            if (this.id === 'changePasswordBtn') return;
+            if (this.id === 'changePasswordBtn' || this.id === 'editProfileBtn') return;
             const ripple = document.createElement('span');
             ripple.classList.add('ripple');
             this.appendChild(ripple);
@@ -194,27 +225,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (changePasswordModal) {
                 changePasswordModal.classList.remove('show-modal');
             }
+             if (editProfileModal) {
+                editProfileModal.classList.remove('show-modal');
+            }
         }
     });
-
-    function printDashboard() {
-        window.print();
-    }
-
-    function exportData() {
-        alert('Export Data\n\nFitur export akan segera tersedia!');
-    }
-
-    function refreshStats() {
-        const statNumbers = document.querySelectorAll('.stat-number');
-        statNumbers.forEach(stat => {
-            stat.style.opacity = '0';
-            setTimeout(() => {
-                stat.style.opacity = '1';
-            }, 100);
-        });
-        showNotification('Statistik diperbarui!', 'success');
-    }
 
     function showNotification(message, type = 'info') {
         const notification = document.createElement('div');

@@ -9,7 +9,6 @@
 </head>
 <body>
     <?php
-        // Menentukan kelas dan ikon berdasarkan nilai persentase pertumbuhan pengguna
         $growthClass = ($data['userGrowthPercentage'] >= 0) ? 'positive' : 'negative';
         $growthIcon = ($data['userGrowthPercentage'] >= 0) ? 'fa-arrow-up' : 'fa-arrow-down';
     ?>
@@ -22,18 +21,6 @@
                 <a href="index.php?c=user&f=dashboard" class="nav-item active">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Analytics</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
                 </a>
                 <a href="index.php?c=user&f=logout" class="nav-item logout">
                     <i class="fas fa-sign-out-alt"></i>
@@ -69,7 +56,7 @@
             <?php endif; ?>
             
             <?php if(isset($_SESSION['error'])): ?>
-                <div class="alert alert-danger" style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+                <div class="alert alert-error">
                     <i class="fas fa-exclamation-circle"></i>
                     <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
                 </div>
@@ -88,7 +75,18 @@
                         </span>
                     </div>
                 </div>
-
+                 <div class="stat-card card-blue">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>New Users</h3>
+                        <p class="stat-number"><?php echo $data['newUsersThisMonth']; ?></p>
+                        <span class="stat-change positive">
+                           Bulan ini
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <div class="content-grid">
@@ -124,37 +122,15 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <button class="btn btn-primary">
+                            <button id="editProfileBtn" class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Edit Profile
                             </button>
                             <button id="changePasswordBtn" class="btn btn-secondary">
                                 <i class="fas fa-key"></i> Change Password
                             </button>
                         </div>
-                         <div id="changePasswordModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Ganti Password</h2>
-            <form id="changePasswordForm">
-                <div class="input-group">
-                    <label for="current_password">Password Lama</label>
-                    <input type="password" id="current_password" name="current_password" required>
-                </div>
-                <div class="input-group">
-                    <label for="new_password">Password Baru</label>
-                    <input type="password" id="new_password" name="new_password" required>
-                </div>
-                <div class="input-group">
-                    <label for="confirm_new_password">Konfirmasi Password Baru</label>
-                    <input type="password" id="confirm_new_password" name="confirm_new_password" required>
-                </div>
-                <button type="submit" class="btn">Simpan</button>
-            </form>
-        </div>
-    </div>
                     </div>
                 </div>
-
                 <div class="activity-card">
                     <div class="card-header">
                         <h2><i class="fas fa-history"></i> Aktivitas Terbaru</h2>
@@ -176,7 +152,54 @@
             </div>
         </main>
     </div>
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ganti Password</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" method="POST">
+                    <div class="input-group">
+                        <label for="current_password">Password Saat Ini</label>
+                        <input type="password" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="new_password">Password Baru</label>
+                        <input type="password" id="new_password" name="new_password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="confirm_new_password">Konfirmasi Password Baru</label>
+                        <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <script src="/resource/dashboard.js"></script>
+        <div id="editProfileModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Profil</h2>
+                    <span class="close-btn">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm" method="POST">
+                        <div class="input-group">
+                            <label for="nama">Nama Lengkap</label>
+                            <input type="text" id="nama" name="nama" value="<?php echo htmlspecialchars($_SESSION['nama']); ?>" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email']); ?>" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <script src="resource/dashboard.js"></script>
 </body>
-</html> 
+</html>

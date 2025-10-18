@@ -30,33 +30,24 @@ class UserController {
             header('Location: index.php?c=user&f=showLogin');
             exit;
         }
-        
-        // Ambil data dari service
         $totalUsers = $this->userService->countTotalUsers();
         $newUsersThisMonth = $this->userService->countNewUsersThisMonth();
         $newUsersLastMonth = $this->userService->countNewUsersLastMonth();
-
-        // Hitung persentase pertumbuhan pengguna
         $userGrowthPercentage = 0;
         if ($newUsersLastMonth > 0) {
             $userGrowthPercentage = (($newUsersThisMonth - $newUsersLastMonth) / $newUsersLastMonth) * 100;
         } else if ($newUsersThisMonth > 0) {
-            $userGrowthPercentage = 100; // Pertumbuhan tak terhingga jika bulan lalu 0
+            $userGrowthPercentage = 100; 
         }
         
-        // Siapkan data untuk view
         $data = [
             'totalUsers' => $totalUsers,
             'newUsersThisMonth' => $newUsersThisMonth,
             'userGrowthPercentage' => round($userGrowthPercentage), // Dibulatkan
-            'activeSessions' => 42, // Placeholder
-            'revenue' => "24.5K", // Placeholder
-            'satisfaction' => "98.5%", // Placeholder
         ];
 
         include __DIR__ . '/../view/User/dashboard.php';
     }
-
     public function login() {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
@@ -86,7 +77,6 @@ class UserController {
             exit;
         }
     }
-
     public function register() {
         $nama = $_POST['nama'] ?? '';
         $email = $_POST['email'] ?? '';
@@ -134,7 +124,7 @@ class UserController {
 
     public function changePassword() {
     header('Content-Type: application/json');
-    error_log('ChangePassword called'); // Tambah log
+    error_log('ChangePassword called'); 
     if (!isset($_SESSION['userid'])) {
         echo json_encode(['success' => false, 'message' => 'User tidak login']);
         return;
@@ -145,7 +135,7 @@ class UserController {
     $newPassword = $_POST['new_password'] ?? '';
     $confirmNewPassword = $_POST['confirm_new_password'] ?? '';
 
-    error_log("UserID: $userId, Current: $currentPassword, New: $newPassword"); // Log data
+    error_log("UserID: $userId, Current: $currentPassword, New: $newPassword"); 
 
     if (empty($currentPassword) || empty($newPassword) || empty($confirmNewPassword)) {
         echo json_encode(['success' => false, 'message' => 'Semua field password harus diisi!']);
@@ -171,6 +161,42 @@ class UserController {
         echo json_encode(['success' => false, 'message' => 'Gagal memperbarui password. Pastikan password saat ini benar.']);
     }
 }
+public function updateProfile() {
+        // Set header untuk merespons sebagai JSON (untuk AJAX)
+        header('Content-Type: application/json');
+        
+        // Pastikan user sudah login
+        if (!isset($_SESSION['userid'])) {
+            echo json_encode(['success' => false, 'message' => 'User tidak login']);
+            return;
+        }
 
+        // Ambil data dari form
+        $userId = $_SESSION['userid'];
+        $nama = $_POST['nama'] ?? '';
+        $email = $_POST['email'] ?? '';
+
+        // Validasi dasar
+        if (empty($nama) || empty($email)) {
+            echo json_encode(['success' => false, 'message' => 'Nama dan Email harus diisi!']);
+            return;
+        }
+
+        // Panggil service untuk memproses pembaruan
+        $success = $this->userService->updateProfile($userId, $nama, $email);
+        
+        if ($success) {
+            // Jika berhasil, perbarui juga data di session
+            $_SESSION['nama'] = $nama;
+            $_SESSION['email'] = $email;
+            
+            // Siapkan pesan sukses untuk ditampilkan setelah halaman di-refresh
+            $_SESSION['success'] = 'Profil berhasil diperbarui!';
+            
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Gagal memperbarui profil. Email mungkin sudah digunakan oleh akun lain.']);
+        }
+    }
 }
 ?>

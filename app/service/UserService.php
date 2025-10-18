@@ -82,6 +82,25 @@ class UserService {
         return $success;
     }
 
+    public function updateProfile($userId, $nama, $email) {
+        $stmt = $this->conn->prepare('SELECT id_akun FROM akun WHERE email = ? AND id_akun != ?');
+        $stmt->bind_param('si', $email, $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $stmt->close();
+            return false; 
+        }
+        $stmt->close();
+        $updateStmt = $this->conn->prepare('UPDATE akun SET nama = ?, email = ? WHERE id_akun = ?');
+        $updateStmt->bind_param('ssi', $nama, $email, $userId);
+        $success = $updateStmt->execute();
+        $updateStmt->close();
+        
+        return $success; 
+    }
+
     public function countNewUsersThisMonth() {
         $query = "SELECT COUNT(id_akun) as total FROM akun WHERE MONTH(created_at) = MONTH(CURRENT_DATE) AND YEAR(created_at) = YEAR(CURRENT_DATE)";
         $result = $this->conn->query($query);
