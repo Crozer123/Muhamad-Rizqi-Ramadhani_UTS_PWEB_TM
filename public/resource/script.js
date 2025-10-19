@@ -1,12 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Animasi fade-in pada container
     const container = document.querySelector('.container');
     container.style.opacity = '0';
     setTimeout(() => {
         container.style.transition = 'opacity 0.5s ease';
         container.style.opacity = '1';
     }, 100);
-    // Validasi sederhana untuk form
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-// Fungsi toggle password visibility
 function togglePassword(fieldId) {
     const field = document.getElementById(fieldId);
     const icon = field.nextElementSibling;
