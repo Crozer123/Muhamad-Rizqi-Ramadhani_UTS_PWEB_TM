@@ -1,4 +1,4 @@
-/* Reset Sederhana */
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -7,7 +7,6 @@ body {
     color: #333;
 }
 
-/* Header Navigasi Toko */
 .store-nav {
     background-color: #1e293b;
     color: #cbd5e1;
@@ -47,7 +46,6 @@ body {
     background-color: #2563eb;
 }
 
-/* Kontainer Utama */
 .store-container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -63,7 +61,6 @@ body {
     padding-bottom: 0.5rem;
 }
 
-/* Grid Produk */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -90,7 +87,6 @@ body {
     color: #aaa;
     line-height: 200px;
     font-style: italic;
-    /* Ganti dengan <img> jika Anda punya URL gambar */
 }
 
 .product-card .product-info {
@@ -108,7 +104,7 @@ body {
     font-size: 0.9rem;
     color: #64748b;
     margin-bottom: 1rem;
-    height: 40px; /* Batasi deskripsi */
+    height: 40px; 
     overflow: hidden;
 }
 
