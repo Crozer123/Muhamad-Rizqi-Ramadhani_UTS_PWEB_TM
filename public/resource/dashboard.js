@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 
-    // --- LOGIKA MODAL GANTI PASSWORD ---
     const changePasswordModal = document.getElementById('changePasswordModal');
     const changePasswordBtn = document.getElementById('changePasswordBtn');
     const changePasswordForm = document.getElementById('changePasswordForm');
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- LOGIKA MODAL EDIT PROFIL ---
     const editProfileModal = document.getElementById('editProfileModal');
     const editProfileBtn = document.getElementById('editProfileBtn');
     const editProfileForm = document.getElementById('editProfileForm');
@@ -86,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Klik di luar modal untuk menutup
     window.onclick = function(event) {
         if (event.target == changePasswordModal) {
             changePasswordModal.classList.remove('show-modal');
