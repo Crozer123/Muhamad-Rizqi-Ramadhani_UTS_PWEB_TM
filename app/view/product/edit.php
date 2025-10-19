@@ -104,6 +104,6 @@
             </div>
         </main>
     </div>
-    <script src="resource/dashboard.js"></script>
+    <script src="public/resource/dashboard.js"></script>
 </body>
 </html>

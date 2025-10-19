@@ -90,7 +90,7 @@
                                 
                                 <td style="padding: 12px;">
                                     <?php if ($product->image_url): ?>
-                                        <img src="<?php echo htmlspecialchars($product->image_url); ?>" 
+                                        <img src="public<?php echo htmlspecialchars($product->image_url); ?>" 
                                              alt="<?php echo htmlspecialchars($product->name); ?>" 
                                              style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                                     <?php else: ?>
@@ -127,6 +127,6 @@
             </div>
         </main>
     </div>
-    <script src="resource/dashboard.js"></script>
+    <script src="public/resource/dashboard.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Produk - Rizqi App</title>
-    <link rel="stylesheet" href="/resource/dashboard.css">
+    <link rel="stylesheet" href="/public/resource/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -92,6 +92,6 @@
             </div>
         </main>
     </div>
-    <script src="resource/dashboard.js"></script>
+    <script src="public/resource/dashboard.js"></script>
 </body>
 </html>
